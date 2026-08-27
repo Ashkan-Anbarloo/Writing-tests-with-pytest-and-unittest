@@ -1,0 +1,15 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+db.sqlite3
+.vscode/
+.idea/
+*.json
+*.sqlite3
+images/
+sabzshop/settings.py
+cart/common
+migrations
+settings.py
+common
