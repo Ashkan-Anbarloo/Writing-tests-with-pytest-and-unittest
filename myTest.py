@@ -26,6 +26,24 @@ class TestMathFunction(unittest.TestCase):
         self.assertEqual(add(2,7), 9)
 
 
+class TestExample(unittest.TestCase):
+
+    def setUp(self):
+        print('start test')
+        self.x = 10
+        self.y = 5
+
+    def tearDown(self):
+        print("tearDown - test finished")
+
+    def test_add(self):
+        self.assertEqual(self.x + self.y, 15)
+
+    def test_sub(self):
+        self.assertEqual(self.x - self.y, 5)
+
+
+
 if __name__ == '__main__':
     unittest.main()
 
