@@ -19,7 +19,6 @@ if __name__ == '__main__':
 
 
 
-
 # browser = webdriver.Firefox()
 # browser.get('http://localhost:8000')
 
