@@ -14,7 +14,7 @@ class NewVisitorTest(unittest.TestCase):
 
     def test_can_start_a_todo_list(self):
         self.browser.get('http://localhost:8000')
-        self.assertIn('To Do' , self.browser.title)
+        self.assertIn('To-Do' , self.browser.title)
         header_text = self.browser.find_element(By.TAG_NAME , 'h1').text
         self.assertIn('To-Do' , header_text)
         inputbox = self.browser.find_element(By.ID , 'id_new_item')
@@ -26,7 +26,7 @@ class NewVisitorTest(unittest.TestCase):
         table = self.browser.find_element(By.ID , 'id_list_table')
         rows = table.find_elements(By.TAG_NAME , 'tr')
         self.assertTrue(any(row.text == '1: Buy peacock feathers' for row in rows))
-        
+
         self.fail('Finish the test!')
         # [...rest of comments as before]
 if __name__ == '__main__':
