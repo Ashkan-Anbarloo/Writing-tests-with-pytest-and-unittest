@@ -17,9 +17,11 @@ Including another URLconf
 # from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.urls import path
-from lists.views import home_page
+# from lists.views import home_page
+from lists import views
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
-    path("", home_page, name="home"),
+    path("", views.home_page, name="home"),
+    path("lists/the-only-list-in-the-world/", views.view_list , name="view_list"),
 ]

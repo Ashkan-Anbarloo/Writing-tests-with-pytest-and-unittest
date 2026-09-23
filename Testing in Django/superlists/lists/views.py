@@ -16,7 +16,12 @@ def home_page(request):
         # item.text = request.POST['item_text']
         # item.save()
         Item.objects.create(text=request.POST['item_text'])
-        return redirect('/')
-    items = Item.objects.all()
+        return redirect('/lists/the-only-list-in-the-world/')
+    # items = Item.objects.all()
     # return render(request , 'home.html' , {'new_item_text':request.POST.get("item_text" , "")})
-    return render(request, 'home.html', {'items': items})
+    return render(request, 'home.html')
+
+
+def view_list(request):
+    items = Item.objects.all()
+    return render(request , 'list.html' , {'items':items})
