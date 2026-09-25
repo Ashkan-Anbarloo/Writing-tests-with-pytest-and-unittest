@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import resolve
 from lists.views import home_page
 from django.http import HttpRequest
-from .models import Item
+from .models import Item , List
 # Create your tests here.
 
 # class SmokeTest(TestCase):
@@ -97,18 +97,31 @@ class ListViewTest(TestCase):
         response = self.client.get('/lists/the-only-list-in-the-world/')
         self.assertContains(response , 'itemey 1')
         self.assertContains(response , 'itemey 2')
+    
+    def test_display_all_list_items(self):
+        mylist = List.objects.create()
+        Item.objects.create(text = 'itemey 1' , list=mylist)
+        Item.objects.create(text = 'itemey 2' , list=mylist)
 
 
     
-class ItemModel(TestCase):
+class ListAndItemModelsTest(TestCase):
     def test_saving_and_retrieving_items(self):
+        mylist = List()
+        mylist.save()
+
         first_item = Item()
         first_item.text = 'the first (ever) list item'
+        first_item.list = mylist
         first_item.save()
 
         second_item = Item()
         second_item.text = 'Item the second'
+        second_item.list = mylist
         second_item.save()
+
+        saved_list = List.objects.get()
+        self.assertEqual(saved_list , mylist)
 
         saved_items = Item.objects.all()
         self.assertEqual(saved_items.count() , 2)
@@ -116,7 +129,9 @@ class ItemModel(TestCase):
         first_saved_item = saved_items[0]
         second_saved_item = saved_items[1]
         self.assertEqual(first_saved_item.text , 'the first (ever) list item')
+        self.assertEqual(first_saved_item.list , mylist)
         self.assertEqual(second_saved_item.text , 'Item the second')
+        self.assertEqual(second_saved_item.list , mylist)
 
     # def test_can_save_multiple_item(self):
     #     self.client.post('/' , data={'item_text':'first item'})
