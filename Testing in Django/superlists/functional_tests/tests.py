@@ -85,7 +85,7 @@ class NewVisitorTest(LiveServerTestCase):
         inputbox = self.browser.find_element(By.ID , 'id_new_item')
         inputbox.send_keys('Buy peacock feathers')
         inputbox.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table('1 : Buy peacock feathers')
+        self.wait_for_row_in_list_table('1: Buy peacock feathers')
 
         edith_list_url = self.browser.current_url
         self.assertRegex(edith_list_url , '/lists/.+')
@@ -99,7 +99,7 @@ class NewVisitorTest(LiveServerTestCase):
         inputbox = self.browser.find_element(By.ID , 'id_new_item')
         inputbox.send_keys('Buy milk')
         inputbox.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table('1 : Buy milk')
+        self.wait_for_row_in_list_table('1: Buy milk')
 
         francis_list_url = self.browser.current_url
         self.assertRegex(francis_list_url , '/lists/.+')
