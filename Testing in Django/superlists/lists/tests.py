@@ -17,7 +17,11 @@ class HomePageTest(TestCase):
     def test_renders_input_form(self):
         response = self.client.get('/')
         self.assertContains(response , "<form method='POST' action='/lists/new'>")
-        self.assertContains(response , 'name="item_text"')
+        self.assertContains(
+            response,
+            '<input name="item_text" id="id_new_item" placeholder="Enter a to-do item" />',
+            html=True,
+        )
     
     
 class NewListTest(TestCase):
@@ -44,8 +48,12 @@ class ListViewTest(TestCase):
     def test_renders_input_form(self):
         mylist = List.objects.create()
         response = self.client.get(f'/lists/{mylist.id}/')
-        self.assertContains(response , f"<form method='POST' action='/lists/{mylist.id}/add_item'>")
-        self.assertContains(response , 'name="item_text"')
+        self.assertContains(response, f'<form method="POST" action="/lists/{mylist.id}/add_item">')
+        self.assertContains(
+            response , 
+            '<input name="item_text" id="id_new_item" placeholder="Enter a to-do item" />',
+            html=True,                   
+        )
 
     def test_displays_only_items_for_that_list(self):
         correct_list = List.objects.create()
