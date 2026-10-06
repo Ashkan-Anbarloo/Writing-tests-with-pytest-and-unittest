@@ -1,0 +1,53 @@
+from selenium import webdriver
+from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+import time
+import unittest
+# from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from selenium.common.exceptions import WebDriverException
+import os
+from unittest import skip
+from pathlib import Path
+
+
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+
+MAX_WAIT = 5
+
+class FunctionalTest(StaticLiveServerTestCase):
+    def setUp(self):
+        service = Service(executable_path=str(BASE_DIR / "geckodriver.exe"))
+        self.browser = webdriver.Firefox(service=service)
+        # if test_server := os.environ.get('TEST_SERVER'):
+        #     self.live_server_url = "http://" + test_server
+    
+    def tearDown(self):
+        self.browser.quit()
+
+    # def test_can_start_a_todo_list(self):
+    #     self.browser.get(self.live_server_url)
+
+    def wait_for_row_in_list_table(self , row_text):
+        start_time = time.time()
+        while True:
+            try:
+                table = self.browser.find_element(By.ID , 'id_list_table')
+                rows = table.find_elements(By.TAG_NAME , 'tr')
+                self.assertIn(row_text , [row.text for row in rows])
+                # self.assertIn("foo", [row.text for row in rows])
+                return 
+            except(AssertionError , WebDriverException):
+                if time.time() - start_time > MAX_WAIT:
+                    raise
+                time.sleep(0.5)
+
+    # def check_for_row_in_list_table(self , row_text):
+    #     table = self.browser.find_element(By.ID , "id_list_table")
+    #     rows = table.find_elements(By.TAG_NAME , 'tr')
+    #     self.assertIn(row_text , [row.text for row in rows])
+
+
+
