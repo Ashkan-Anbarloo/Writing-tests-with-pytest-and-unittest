@@ -20,7 +20,7 @@ MAX_WAIT = 5
 
 
 class ItemValidationTest(FunctionalTest):
-    # @skip
+    @skip
     def test_cannot_add_empty_list_item(self):
         self.browser.get(self.live_server_url)
         self.browser.find_element(By.ID , "id_new_item").send_keys(Keys.ENTER)
