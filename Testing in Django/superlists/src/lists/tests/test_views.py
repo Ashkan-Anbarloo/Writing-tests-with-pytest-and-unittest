@@ -4,6 +4,9 @@ from lists.views import home_page
 from django.http import HttpRequest
 from lists.models import Item , List
 import lxml.html
+import html
+from django.urls import reverse 
+from lists.forms import EMPTY_ITEM_ERROR
 # Create your tests here.
 
 # class SmokeTest(TestCase):
@@ -40,11 +43,26 @@ class NewListTest(TestCase):
         self.assertEqual(new_item.text , 'A new list item')
     
     def test_redirects_after_POST(self):
-        response = self.client.post('/lists/new' , data={'item_text' : 'A new list item'})
+        response = self.client.post('/lists/new' , data={'text' : 'A new list item'})
         new_list = List.objects.get()
         self.assertRedirects(response , f'/lists/{new_list.id}/')
-        
+    
+    def post_invalid_input(self):
+        return self.client.post('/lists/new' , data={'text':""})
+    
+    def test_for_invalid_input_nothing_saved_to_db(self):
+        self.post_invalid_input()
+        self.assertEqual(Item.objects.count(), 0)
+    
 
+    def test_for_invalid_input_renders_list_template(self):
+        response = self.post_invalid_input()
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "home.html")
+
+    def test_for_invalid_input_shows_error_on_page(self):
+        response = self.post_invalid_input()
+        self.assertContains(response, html.escape(EMPTY_ITEM_ERROR))
 
 class ListViewTest(TestCase):
     def test_uses_list_template(self):
@@ -59,7 +77,7 @@ class ListViewTest(TestCase):
         parsed = lxml.html.fromstring(response.content)
         [form] = parsed.cssselect("form[method=POST]")
         self.assertEqual(form.get('action') , f"/lists/{mylist.id}/add_item")
-        [input] = form.cssselect("input[name=item_text]")
+        [input] = form.cssselect("input[name=text]")
         # self.assertContains(response, f'<form method="POST" action="/lists/{mylist.id}/add_item">')
         # self.assertContains(
         #     response , 
@@ -84,6 +102,22 @@ class ListViewTest(TestCase):
         Item.objects.create(text = 'itemey 1' , list=mylist)
         Item.objects.create(text = 'itemey 2' , list=mylist)
 
+    def post_invalid_input(self):
+        mylist = List.objects.create()
+        return self.client.post(f"/lists/{mylist.id}/", data={"text": ""})
+    
+    def test_for_invalid_input_nothing_saved_to_db(self):
+        self.post_invalid_input()
+        self.assertEqual(Item.objects.count(), 0)
+
+    def test_for_invalid_input_renders_list_template(self):
+        response = self.post_invalid_input()
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "list.html")
+
+    def test_for_invalid_input_shows_error_on_page(self):
+        response = self.post_invalid_input()
+        self.assertContains(response, html.escape(EMPTY_ITEM_ERROR))
 
     
 
@@ -93,7 +127,7 @@ class NewItemTest(TestCase):
         correct_list = List.objects.create()
         self.client.post(
             f"/lists/{correct_list.id}/add_item",
-            data={"item_text": "A new item for an existing list"},
+            data={"text": "A new item for an existing list"},
         )
         self.assertEqual(Item.objects.count(), 1)
         new_item = Item.objects.get()
@@ -106,6 +140,6 @@ class NewItemTest(TestCase):
         correct_list = List.objects.create()
         response = self.client.post(
             f"/lists/{correct_list.id}/add_item",
-            data={"item_text": "A new item for an existing list"},
+            data={"text": "A new item for an existing list"},
         )
         self.assertRedirects(response, f"/lists/{correct_list.id}/")
