@@ -20,6 +20,9 @@
                         {% if form.errors %}
                             <div class="invalid-feedback">{{form.errors.text}}</div>
                         {% endif %}
+                        {% if error %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endif %}
                         {% comment %} <input
                             class="form-control form-control-lg {% if error %}is-invalid{% endif %}"
                             name="text"

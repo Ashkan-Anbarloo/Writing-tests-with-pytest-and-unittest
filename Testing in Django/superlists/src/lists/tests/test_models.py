@@ -16,6 +16,10 @@ class ItemModelTest(TestCase):
         item.list = mylist
         item.save()
         self.assertIn(item, mylist.item_set.all())
+        
+    def test_string_representation(self):
+        item = Item(text="some text")
+        self.assertEqual(str(item), "some text")
 
 
 

@@ -38,8 +38,8 @@ class ItemFormTest(TestCase):
         self.assertFalse(form.is_valid())
         field = form.fields["text"]
         self.assertEqual(
-        field.widget.attrs["class"],  
-        "form-control form-control-lg is-invalid",
+            field.widget.attrs["class"],  
+            "form-control form-control-lg is-invalid",
         )
 
 
@@ -66,3 +66,10 @@ class ExistingListItemFormTest(TestCase):
         self.assertTrue(form.is_valid())
         new_item = form.save()
         self.assertEqual(new_item, Item.objects.get())
+    
+    # def test_form_save(self):
+    #     mylist = List.objects.create()
+    #     form = ExistingListItemForm(for_list=mylist, data={"text": "hi"})
+    #     self.assertTrue(form.is_valid())
+    #     new_item = form.save()
+    #     self.assertEqual(new_item, Item.objects.get())
