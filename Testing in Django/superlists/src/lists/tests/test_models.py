@@ -39,3 +39,17 @@ class ListModelTest(TestCase):
         item = Item(list=list2, text="bla")
         # item.full_clean()
         item.save()
+    
+    def test_list_items_order(self):
+        list1 = List.objects.create()
+        item1 = Item.objects.create(list=list1, text="i1")
+        item2 = Item.objects.create(list=list1, text="item 2")
+        item3 = Item.objects.create(list=list1, text="3")
+        self.assertEqual(
+        list(list1.item_set.all()),
+        [item1, item2, item3],
+        )
+    
+    def test_string_representation(self):
+        item = Item(text="some text")
+        self.assertEqual(str(item), "some text")
