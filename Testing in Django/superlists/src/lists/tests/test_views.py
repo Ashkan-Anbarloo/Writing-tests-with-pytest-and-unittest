@@ -31,13 +31,6 @@ class HomePageTest(TestCase):
         [input] = form.cssselect('input[name=text]')
         inputs = form.cssselect('input')
         self.assertIn('text' , [input.get('name') for input in inputs])
-        # self.assertContains(response , "<form method='POST' action='/lists/new'>")
-        # self.assertContains(
-        #     response,
-        #     '<input name="item_text" id="id_new_item" placeholder="Enter a to-do item" />',
-        #     html=True,
-        # )
-
     
     
 class NewListTest(TestCase):
@@ -81,14 +74,9 @@ class ListViewTest(TestCase):
         response = self.client.get(f'/lists/{mylist.id}/')
         parsed = lxml.html.fromstring(response.content)
         [form] = parsed.cssselect("form[method=POST]")
-        self.assertEqual(form.get('action') , f"/lists/{mylist.id}/add_item")
+        self.assertEqual(form.get('action') , f"/lists/{mylist.id}/")
         [input] = form.cssselect("input[name=text]")
-        # self.assertContains(response, f'<form method="POST" action="/lists/{mylist.id}/add_item">')
-        # self.assertContains(
-        #     response , 
-        #     '<input name="item_text" id="id_new_item" placeholder="Enter a to-do item" />',
-        #     html=True,                   
-        # )
+        
 
     def test_displays_only_items_for_that_list(self):
         correct_list = List.objects.create()
@@ -124,6 +112,12 @@ class ListViewTest(TestCase):
         response = self.post_invalid_input()
         self.assertContains(response, html.escape(EMPTY_ITEM_ERROR))
     
+    def test_for_invalid_input_sets_is_invalid_class(self):
+        response = self.post_invalid_input()
+        parsed = lxml.html.fromstring(response.content)
+        [input] = parsed.cssselect("input[name=text]")
+        self.assertIn("is-invalid", set(input.classes))
+
     # @skip
     def test_duplicate_item_validation_errors_end_up_on_lists_page(self):
         list1 = List.objects.create()

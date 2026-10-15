@@ -13,14 +13,13 @@ def home_page(request):
     # return render(request, 'home.html')
 
 
+
 def view_list(request , list_id):
     our_list = List.objects.get(id=list_id)
     form = ExistingListItemForm(for_list=our_list)
     if request.method == "POST":
         form = ExistingListItemForm(for_list=our_list , data=request.POST)
         if form.is_valid():
-            # Item.objects.create(text=request.POST['text'] , list=our_list)
-            # form.save(for_list=our_list)
             form.save()
             return redirect(our_list)
     return render(request , 'list.html' , {'list':our_list , 'form':form})
@@ -39,3 +38,4 @@ def add_item(request , list_id):
     our_list = List.objects.get(id=list_id)
     Item.objects.create(text = request.POST['text'] , list=our_list)
     return redirect(f"/lists/{our_list.id}/")
+
