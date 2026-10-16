@@ -75,13 +75,13 @@ class ItemValidationTest(FunctionalTest):
         self.get_item_input_box().send_keys(Keys.ENTER)
         self.wait_for(  
             lambda: self.assertTrue(  
-                self.browser.find_element(self.get_error_element().is_displayed()),  
+                self.get_error_element().is_displayed() 
             )
         )
         
         self.get_item_input_box().send_keys("a")
         self.wait_for(
             lambda: self.assertFalse(
-                self.browser.find_element(self.get_error_element().is_displayed()),  
+                self.get_error_element().is_displayed() 
             )
         )
