@@ -107,12 +107,12 @@ beforeEach(() => {
     expect(errorMsg.checkVisibility()).toBe(true);
   });
   it("should hide error message on input", () => {
-    initialize(inputSelector , errorSelector);
+    initialize(inputSelector);
     textInput.dispatchEvent(new InputEvent("input"));
     expect(errorMsg.checkVisibility()).toBe(false);
   });
   it("should not hide error message before event is fired", () => {
-    initialize(inputSelector , errorSelector);
+    initialize(inputSelector);
     expect(errorMsg.checkVisibility()).toBe(true);
   });
 });
