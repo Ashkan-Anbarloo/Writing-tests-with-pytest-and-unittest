@@ -8,6 +8,25 @@
     </head>
     <body>
         <div class="container">
+            <nav class="navbar">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="/">Superlists</a>
+                    <form method="POST" action="/accounts/send_login_email">
+                        <div class="input-group">
+                            <label class="navbar-text me-2" for="id_email_input">
+                                Enter your email to log in
+                            </label>
+                            <input
+                                id="id_email_input"
+                                name="email"
+                                class="form-control"
+                                placeholder="your@email.com"
+                            />
+                            {% csrf_token %}
+                        </div>
+                    </form>
+                </div>
+            </nav>
             <div class="row justify-content-center p-5 bg-body-tertiary rounded-3">
                 <div class="col-lg-6 text-center">
                     <h1 class="display-1 mb-4">{% block header_text %}{% endblock %}</h1>
@@ -34,16 +53,7 @@
                         {% if error %}
                             <div class="invalid-feedback d-block">{{ error }}</div>
                         {% endif %}
-                        {% comment %} <input
-                            class="form-control form-control-lg {% if error %}is-invalid{% endif %}"
-                            name="text"
-                            id="id_text"
-                            placeholder="Enter a to-do item"
-                        > {% endcomment %}
-                        {% comment %} {% endif %} {% endcomment %}
                         
-                        
-                        {% comment %} <input class="form-control form-control-lg" name="item_text" id="id_new_item" placeholder="Enter a to-do item" /> {% endcomment %}
                     </form>
                 </div>
             </div>
