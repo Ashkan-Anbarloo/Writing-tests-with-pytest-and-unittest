@@ -30,4 +30,5 @@ urlpatterns = [
     # path('lists/<int:list_id>/add_item' , views.add_item , name='add_item'),
     # ///
     path("lists/", include("lists.urls")),
+    path("accounts/", include("accounts.urls")),
 ]
