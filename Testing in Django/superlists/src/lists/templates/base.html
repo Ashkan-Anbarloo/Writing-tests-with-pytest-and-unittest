@@ -7,6 +7,8 @@
         <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
     </head>
     <body>
+        
+
         <div class="container">
             <nav class="navbar">
                 <div class="container-fluid">
@@ -27,13 +29,13 @@
                     </form> {% endcomment %}
                     {% if user.email %}  
                     <span class="navbar-text">Logged in as {{ user.email }}</span>
-                    <form method="POST" action="TODO">
+                    <form method="POST" action="{% url 'logout' %}">
                         {% csrf_token %}
                         <button id="id_logout" class="btn btn-outline-secondary" type="submit">
                                 Log out
                         </button>
                         </form>
-                        {% else %}
+                    {% else %}
                         <form method="POST" action="{% url 'send_login_email' %}">
                         <div class="input-group">
                             <label class="navbar-text me-2" for="id_email_input">
@@ -46,6 +48,7 @@
                             placeholder="your@email.com"
                             />
                             {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-primary ms-2">Log in</button>
                         </div>
                     </form>
                     {% endif %}

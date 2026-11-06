@@ -39,3 +39,5 @@ def login(request):
     else:
         messages.error(request, "Invalid login link, please request a new one")  
     return redirect("/")
+
+    

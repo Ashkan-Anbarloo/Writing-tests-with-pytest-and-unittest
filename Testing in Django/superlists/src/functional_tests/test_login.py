@@ -8,13 +8,25 @@ SUBJECT = "Your login link for Superlists"
 
 class LoginTest(FunctionalTest):
     def test_login_using_magic_link(self):
-        # Edith goes to the awesome superlists site
-        # and notices a "Log in" section in the navbar for the first time
-        # It's telling her to enter her email address, so she does
+
         self.browser.get(self.live_server_url)
-        self.browser.find_element(By.CSS_SELECTOR, "input[name=email]").send_keys(
-            TEST_EMAIL, Keys.ENTER
-        )
+        box = self.browser.find_element(By.CSS_SELECTOR, "input[name=email]")
+        box.send_keys(TEST_EMAIL)
+        # print("VALUE:", box.get_attribute("value"))
+        self.browser.find_element(By.CSS_SELECTOR, ".navbar button[type=submit]").click()
+        # import time
+        # time.sleep(2)
+        # print("URL:", self.browser.current_url)
+        # print("MAILS:", len(mail.outbox))
+
+
+        # /////////////////
+        # import time
+        # time.sleep(2)
+        # print("URL:", self.browser.current_url)
+        # print("MAILS:", len(mail.outbox))
+        # print(self.browser.page_source[:3000])
+        # /////////////////
         # A message appears telling her an email has been sent
         self.wait_for(
             lambda: self.assertIn(
@@ -41,3 +53,19 @@ class LoginTest(FunctionalTest):
         )
         navbar = self.browser.find_element(By.CSS_SELECTOR, ".navbar")
         self.assertIn(TEST_EMAIL, navbar.text)
+
+
+
+        self.wait_for(
+            lambda: self.browser.find_element(By.CSS_SELECTOR, "#id_logout"),
+        )
+        navbar = self.browser.find_element(By.CSS_SELECTOR, ".navbar")
+        self.assertIn(TEST_EMAIL, navbar.text)
+        # Now she logs out
+        self.browser.find_element(By.CSS_SELECTOR, "#id_logout").click()
+        # She is logged out
+        self.wait_for(
+            lambda: self.browser.find_element(By.CSS_SELECTOR, "input[name=email]")
+        )
+        navbar = self.browser.find_element(By.CSS_SELECTOR, ".navbar")
+        self.assertNotIn(TEST_EMAIL, navbar.text)
